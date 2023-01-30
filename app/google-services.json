@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "795463003203",
+    "project_id": "video-compressor-aacce",
+    "storage_bucket": "video-compressor-aacce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:795463003203:android:19f8c367e1e59fba69b8f6",
+        "android_client_info": {
+          "package_name": "com.azzuresolutions.videocompressor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "795463003203-4ll8hs6cs1g2ctqjcvt7h51hd5n1kkkh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.azzuresolutions.videocompressor",
+            "certificate_hash": "b1424c2a4b163c123e56d3ad71f28b8348b272e2"
+          }
+        },
+        {
+          "client_id": "795463003203-og2nkpntmak12gs83gsm7t8dhtqf9ino.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCT5xIeRorADH4A97q7fgNsHN3QM4hb-iY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "795463003203-og2nkpntmak12gs83gsm7t8dhtqf9ino.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

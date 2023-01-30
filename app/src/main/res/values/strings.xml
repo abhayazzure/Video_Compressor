@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="compressed">Compressed</string>
+    <string name="setting">Setting</string>
+    <string name="allow_storage_access">allow storage access</string>
+    <string name="video_fast">Video Fast</string>
+    <string name="video_slow">Video Slow</string>
+    <string name="video_trim">Video Trim</string>
+    <string name="video_crop">Video Crop</string>
+    <string name="video_to_mp3">Video to mp3</string>
+    <string name="ask_permission_msg">To Compress your videos,\10VideoCompressor needs to access your video library.</string>
+    <string name="image_compressor">Image Compressor</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
