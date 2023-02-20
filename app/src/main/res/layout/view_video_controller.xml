@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true">
+
+
+    <LinearLayout
+        android:id="@+id/view_image"
+        style="@style/LView"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@color/black">
+
+        <ImageView
+            android:id="@+id/image_one"
+            style="@style/ImageTrim"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp" />
+
+        <ImageView
+            android:id="@+id/image_two"
+            style="@style/ImageTrim"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp" />
+
+        <ImageView
+            android:id="@+id/image_three"
+            style="@style/ImageTrim"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp" />
+
+        <ImageView
+            android:id="@+id/image_four"
+            style="@style/ImageTrim"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp" />
+
+        <ImageView
+            android:id="@+id/image_five"
+            style="@style/ImageTrim"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp" />
+
+        <ImageView
+            android:id="@+id/image_six"
+            style="@style/ImageTrim"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp" />
+
+        <ImageView
+            android:id="@+id/image_seven"
+            style="@style/ImageTrim"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp" />
+
+        <ImageView
+            android:id="@+id/image_eight"
+            style="@style/ImageTrim"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp" />
+    </LinearLayout>
+</RelativeLayout>

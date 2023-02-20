@@ -11,5 +11,11 @@
     <color name="bg_light">#202125</color>
     <color name="tab_select">#777777</color>
     <color name="transparent">#00000000</color>
+    <color name="trans_black1">#50000000</color>
+    <color name="blue_dark">#0161db</color>
+    <color name="trans_black">#50ffffff</color>
+    <color name="blue_light">#4d9fea</color>
+    <color name="bg_color">#0d0d0d</color>
+    <color name="colorTxt">#212121</color>
 
 </resources>

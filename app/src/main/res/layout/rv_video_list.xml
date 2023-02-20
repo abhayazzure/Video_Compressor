@@ -23,8 +23,20 @@
         android:singleLine="true"
         android:textSize="@dimen/_14ssp"
         android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/ivVideo" />
-
+    <TextView
+        android:id="@+id/tvVideo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:padding="@dimen/_5sdp"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:textSize="@dimen/_14ssp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/ivVideo" />
     <ImageView
         android:id="@+id/imgCheck"
         android:layout_width="@dimen/_20sdp"

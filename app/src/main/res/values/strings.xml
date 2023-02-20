@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Video Compressor</string>
     <string name="compressed">Compressed</string>
     <string name="setting">Setting</string>
     <string name="allow_storage_access">allow storage access</string>
@@ -10,7 +10,29 @@
     <string name="video_to_mp3">Video to mp3</string>
     <string name="ask_permission_msg">To Compress your videos,\10VideoCompressor needs to access your video library.</string>
     <string name="image_compressor">Image Compressor</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="time_hours_minutes_seconds_formatter" translatable="false">%02d:%02d:%02d</string>
+    <string name="time_minutes_seconds_formatter" translatable="false">%02d:%02d</string>
+    <string name="time_seconds_formatter" translatable="false">%02d</string>
+    <string name="default_video_name">Nature video</string>
+    <string name="audio_format">Audio Format</string>
+    <string name="beta">Beta</string>
+    <string name="bitrate">Bitrate</string>
+    <string name="convert">Convert</string>
+    <string name="list_empty_message">No process found</string>
+    <string name="without_audio">Without audio</string>
+    <string name="with_audio">With audio</string>
+    <string name="save_small">Save</string>
+    <string name="slow_motion">Slow Motion</string>
+    <string name="_00_00">00:00</string>
+    <string name="enter_a_file_name">Enter a file name</string>
+    <string name="save_as">Save As</string>
+    <string name="_00_15_00_30">00:15/00:30</string>
+    <string name="_16_9">16:9</string>
+    <string name="_3_2">3:2</string>
+    <string name="_9_16">9:16</string>
+    <string name="_4_5">4:5</string>
+    <string name="_1_1">1:1</string>
+    <string name="_00_15">00:15</string>
+    <string name="string_crop_video">crop video</string>
 
 </resources>

@@ -11,10 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.azzuresolutions.videocompressor.R
 import com.azzuresolutions.videocompressor.adapter.VideoAdapter
 import com.azzuresolutions.videocompressor.databinding.FragmentGalleryBinding
 import com.azzuresolutions.videocompressor.model.VideoModel
 import com.devbrackets.android.exomedia.listener.OnPreparedListener
+import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.ExperimentalTime
 import kotlin.time.minutes
@@ -38,7 +40,7 @@ class GalleryFragment : Fragment(), OnPreparedListener {
         binding.videoView.setOnPreparedListener(this)
 
         //For now we just picked an arbitrary item to play
-        binding.videoView.setVideoURI(Uri.parse("https://archive.org/download/Popeye_forPresident/Popeye_forPresident_512kb.mp4"));
+        binding.videoView.setVideoURI(Uri.parse(""));
 
         videoList = getAllMediaFilesOnDevice()
         this.binding.rvVideo.layoutManager = GridLayoutManager(requireContext(), 3)
@@ -55,7 +57,9 @@ class GalleryFragment : Fragment(), OnPreparedListener {
             MediaStore.Video.Media._ID,
             MediaStore.Video.Media.DISPLAY_NAME,
             MediaStore.Video.Media.DURATION,
-            MediaStore.Video.Media.SIZE
+            MediaStore.Video.Media.SIZE,
+            MediaStore.Video.Media.WIDTH,
+            MediaStore.Video.Media.HEIGHT
         )
 
         val sortOrder = "${MediaStore.Video.Media.DISPLAY_NAME} ASC"
@@ -75,7 +79,8 @@ class GalleryFragment : Fragment(), OnPreparedListener {
             val durationColumn =
                 cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DURATION)
             val sizeColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE)
-
+            val videoWidth = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.WIDTH)
+            val videoHeight = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.HEIGHT)
             while (cursor.moveToNext()) {
                 val id = cursor.getLong(idColumn)
                 val name = cursor.getString(nameColumn)
@@ -84,12 +89,25 @@ class GalleryFragment : Fragment(), OnPreparedListener {
                 val contentUri: Uri = ContentUris.withAppendedId(
                     MediaStore.Video.Media.EXTERNAL_CONTENT_URI, id
                 )
-                videoList.add(VideoModel(contentUri, name, duration, size, false))
+                val width = cursor.getInt(videoWidth)
+                val height = cursor.getInt(videoHeight)
+                videoList.add(
+                    VideoModel(
+                        contentUri,
+                        name,
+                        duration,
+                        width,
+                        height,
+                        size,
+                        false
+                    )
+                )
             }
         }
 
         return videoList
     }
+
 
     override fun onPrepared() {
         binding.videoView.start();

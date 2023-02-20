@@ -41,16 +41,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun buttonClick() {
         binding.btnVideocrop.setOnClickListener {
-            requestPermissions(READ_AND_WRITE, 111)
+            requestPermissions(READ_AND_WRITE, 1)
         }
         binding.btnVideotrim.setOnClickListener {
-            requestPermissions(READ_AND_WRITE, 111)
+            requestPermissions(READ_AND_WRITE, 2)
         }
         binding.btnVideoslowmotion.setOnClickListener {
-            requestPermissions(READ_AND_WRITE, 111)
+            requestPermissions(READ_AND_WRITE, 3)
         }
         binding.btnVideofastmotion.setOnClickListener {
-            requestPermissions(READ_AND_WRITE, 111)
+            requestPermissions(READ_AND_WRITE, 4)
+        }
+        binding.btnVideotoaudio.setOnClickListener {
+            requestPermissions(READ_AND_WRITE, 5)
         }
     }
 
@@ -59,13 +62,27 @@ class MainActivity : AppCompatActivity() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        if (requestCode == 111) {
-            checkWritePermission(grantResults)
+        when (requestCode) {
+            1 -> {
+                checkWritePermission(grantResults, "Crop")
+            }
+            2 -> {
+                checkWritePermission(grantResults, "Trim")
+            }
+            3 -> {
+                checkWritePermission(grantResults, "Slow")
+            }
+            4 -> {
+                checkWritePermission(grantResults, "Fast")
+            }
+            5 -> {
+                checkWritePermission(grantResults,"Convert to Mp3")
+            }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    private fun checkWritePermission(iArr: IntArray) {
+    private fun checkWritePermission(iArr: IntArray, name: String) {
         if (iArr.isNotEmpty()) {
             var z = false
             if (iArr[0] == 0 || iArr[1] == 0) {
@@ -76,19 +93,18 @@ class MainActivity : AppCompatActivity() {
                     Intent(
                         this,
                         GalleryFileActivity::class.java
-                    )
+                    ).putExtra("name", name)
                 )
             } else if (Build.VERSION.SDK_INT >= 25 && shouldShowRequestPermissionRationale(Manifest.permission.READ_MEDIA_VIDEO)) {
                 if (Build.VERSION.SDK_INT >= 25) {
                     requestPermissions(
                         arrayOf(
-                            Manifest.permission.READ_MEDIA_VIDEO
+                            Manifest.permission.READ_MEDIA_VIDEO,
+                            Manifest.permission.POST_NOTIFICATIONS
                         ), 1009
                     )
                 }
             }
         }
     }
-
-
 }
