@@ -1,18 +1,18 @@
 package com.azzuresolutions.videocompressor.activity
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.ContextWrapper
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.media.PlaybackParams
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.text.Editable
 import android.util.Log
 import android.view.View
 import android.widget.SeekBar
+import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.azzuresolutions.videocompressor.R
@@ -44,37 +44,41 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
         createMediaPlayer(uri)
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun buttonClick() {
-        binding.ivPlay.setOnClickListener {
-            binding.listItemVideoClickerSmall.visibility = View.GONE
-            binding.cardThumb.visibility = View.GONE
-            binding.ivPlay.visibility = View.GONE
-            binding.videoView.start()
-            binding.imgPlay.setImageDrawable(getDrawable(R.drawable.ic_pause))
-            if (mediaPlayer.isPlaying) {
-                mediaPlayer.pause()
-                timer.shutdown()
-                binding.imgPlay.setImageDrawable(getDrawable(R.drawable.ic_play))
-            } else {
-                mediaPlayer.start()
-                binding.imgPlay.setImageDrawable(getDrawable(R.drawable.ic_pause))
-                timer = Executors.newScheduledThreadPool(1)
-                timer.scheduleAtFixedRate({
-                    if (!binding.playProgressBar.isPressed) {
-                        binding.playProgressBar.progress = mediaPlayer.currentPosition
-                        binding.videoView.seekTo(mediaPlayer.currentPosition.toLong())
-                    }
-                }, 10, 10, TimeUnit.MILLISECONDS)
-            }
-        }
+//        binding.ivPlay.setOnClickListener {
+//            binding.listItemVideoClickerSmall.visibility = View.GONE
+//            binding.cardThumb.visibility = View.GONE
+//            binding.ivPlay.visibility = View.GONE
+//            binding.videoView.start()
+//            binding.imgPlay.setImageDrawable(getDrawable(R.drawable.ic_pause))
+//            if (mediaPlayer.isPlaying) {
+//                mediaPlayer.pause()
+//                timer.shutdown()
+//                binding.imgPlay.setImageDrawable(getDrawable(R.drawable.ic_play))
+//            } else {
+//                mediaPlayer.start()
+//                binding.videoView.start()
+//                binding.imgPlay.setImageDrawable(getDrawable(R.drawable.ic_pause))
+//                timer = Executors.newScheduledThreadPool(1)
+//                timer.scheduleAtFixedRate({
+//                    if (!binding.playProgressBar.isPressed) {
+//                        binding.playProgressBar.progress = mediaPlayer.currentPosition
+//                        binding.videoView.seekTo(mediaPlayer.currentPosition.toLong())
+//                    }
+//                }, 10, 10, TimeUnit.MILLISECONDS)
+//            }
+//        }
         binding.imgPlay.setOnClickListener {
             binding.imgPlay.setImageDrawable(getDrawable(R.drawable.ic_pause))
             if (mediaPlayer.isPlaying) {
                 mediaPlayer.pause()
                 timer.shutdown()
+                binding.videoView.pause()
                 binding.imgPlay.setImageDrawable(getDrawable(R.drawable.ic_play))
             } else {
                 mediaPlayer.start()
+                binding.videoView.start()
                 binding.imgPlay.setImageDrawable(getDrawable(R.drawable.ic_pause))
                 timer = Executors.newScheduledThreadPool(1)
                 timer.scheduleAtFixedRate({
@@ -82,21 +86,6 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
                         binding.playProgressBar.progress = mediaPlayer.currentPosition
                     }
                 }, 10, 10, TimeUnit.MILLISECONDS)
-            }
-        }
-        binding.videoView.setOnPreparedListener {
-            mediaPlayer.setScreenOnWhilePlaying(true);
-            var myPlayBackParams: PlaybackParams? = null
-            myPlayBackParams = PlaybackParams()
-            myPlayBackParams.speed = 0.8f //you can set speed here
-            mediaPlayer.playbackParams = myPlayBackParams
-        }
-        binding.videoView.setOnPreparedListener {
-            binding.listItemVideoClickerSmall.visibility = View.VISIBLE
-            if (binding.videoView.isPlaying) {
-                binding.videoView.stopPlayback()
-            } else {
-                binding.videoView.restart()
             }
         }
         binding.ryBottom.setOnClickListener {
@@ -104,12 +93,29 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
             binding.etFastSaveName.text =
                 stripExtension(GalleryFileActivity.videoList1[0].name)!!.toEditable()
             binding.tvSavePath.text =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
                     .toString()
         }
+        binding.seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                binding.videoView.seekTo(1)
+                mediaPlayer.playbackParams = mediaPlayer.playbackParams.apply {
+                    speed = progress.toFloat()
+                }
+                binding.videoView.start()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                TODO("Not yet implemented")
+            }
+        })
         binding.rlSave.setOnClickListener {
             saveVideoToInternalStorage(
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                Environment.getExternalStorageDirectory().absolutePath
                     .toString()
             )
         }
@@ -136,12 +142,39 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
                 binding.tvVideoDuration.text = "$min:$sec / $duration"
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                mediaPlayer.seekTo(binding.playProgressBar.progress)
+                binding.videoView.seekTo(binding.playProgressBar.progress.toLong())
+            }
+
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 mediaPlayer.seekTo(binding.playProgressBar.progress)
-//                binding.videoView.seekTo(binding.playProgressBar.progress.toLong())
+                binding.videoView.seekTo(binding.playProgressBar.progress.toLong())
             }
         })
+        var progres: Int? = 0
+        binding.run {
+            seekbar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    progres = progress
+                    progres = progres!! / 100
+                    binding.txtStartDuration.text = progress.toString()
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar) {}
+                override fun onStopTrackingTouch(seekBar: SeekBar) {}
+            })
+            videoView.setOnPreparedListener {
+                //works only from api 23
+                var myPlayBackParams: PlaybackParams? = null
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    myPlayBackParams = PlaybackParams()
+                    myPlayBackParams.speed = 0.8f //you can set speed here
+                    mediaPlayer.playbackParams = myPlayBackParams
+                }
+            }
+        }
+
     }
 
     fun stripExtension(s: String?): String? {
@@ -154,9 +187,9 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
         val uuid: UUID = UUID.randomUUID()
         try {
             val currentFile = File(filePath)
-            val loc = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            val directory = File("$filePath/Video Compressor/")
-            directory.parentFile!!.mkdirs()
+            val loc = Environment.getExternalStorageDirectory().absolutePath
+            val directory = File(loc, "Video Compressor.mp4")
+            directory.parentFile!!.createNewFile()
             val fileName = String.format("$uuid.mp4")
             val newfile = File(directory, fileName)
             if (currentFile.exists()) {

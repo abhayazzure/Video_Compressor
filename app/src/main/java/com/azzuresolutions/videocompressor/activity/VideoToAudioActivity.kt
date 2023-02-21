@@ -54,10 +54,11 @@ class VideoToAudioActivity : AppCompatActivity() {
         val uri: Uri = Uri.parse(GalleryFileActivity.videoList1[0].uri.toString())
         binding.videoView.setVideoURI(uri)
         binding.videoView.requestFocus()
+        createMediaPlayer(uri)
 
-        binding.videoView.setOnPreparedListener {
-            binding.playProgressBar.max
-        }
+//        binding.videoView.setOnPreparedListener {
+//            binding.playProgressBar.max
+//        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -66,10 +67,9 @@ class VideoToAudioActivity : AppCompatActivity() {
             SeekBar.OnSeekBarChangeListener {
             @SuppressLint("SetTextI18n")
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                binding.videoView.seekTo(progress.toLong())
-                val millis = binding.videoView.currentPosition
+                val millis = mediaPlayer.currentPosition
                 val total_secs =
-                    TimeUnit.SECONDS.convert(millis, TimeUnit.MILLISECONDS)
+                    TimeUnit.SECONDS.convert(millis.toLong(), TimeUnit.MILLISECONDS)
                 val mins = TimeUnit.MINUTES.convert(total_secs, TimeUnit.SECONDS)
                 val secs = total_secs - mins * 60
                 val sec: String = if (secs <= 9) {
@@ -85,23 +85,31 @@ class VideoToAudioActivity : AppCompatActivity() {
                 binding.tvVideoDuration.text = "$min:$sec / $duration"
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                mediaPlayer.seekTo(binding.playProgressBar.progress)
+                binding.videoView.seekTo(binding.playProgressBar.progress.toLong())
+            }
+
             override fun onStopTrackingTouch(seekBar: SeekBar) {
+                mediaPlayer.seekTo(binding.playProgressBar.progress)
                 binding.videoView.seekTo(binding.playProgressBar.progress.toLong())
             }
         })
-        binding.ivPlay.setOnClickListener {
-            if (binding.videoView.isPlaying) {
-                binding.videoView.pause()
+        binding.imgPlay.setOnClickListener {
+            binding.imgPlay.setImageDrawable(getDrawable(R.drawable.ic_pause))
+            if (mediaPlayer.isPlaying) {
+                mediaPlayer.pause()
                 timer.shutdown()
+                binding.videoView.pause()
                 binding.imgPlay.setImageDrawable(getDrawable(R.drawable.ic_play))
             } else {
+                mediaPlayer.start()
                 binding.videoView.start()
                 binding.imgPlay.setImageDrawable(getDrawable(R.drawable.ic_pause))
                 timer = Executors.newScheduledThreadPool(1)
                 timer.scheduleAtFixedRate({
                     if (!binding.playProgressBar.isPressed) {
-                        binding.playProgressBar.progress = binding.videoView.currentPosition.toInt()
+                        binding.playProgressBar.progress = mediaPlayer.currentPosition
                     }
                 }, 10, 10, TimeUnit.MILLISECONDS)
             }
@@ -140,12 +148,12 @@ class VideoToAudioActivity : AppCompatActivity() {
 
         }
 
-        binding.ivPlay.setOnClickListener {
-            binding.videoView.start()
-            binding.ryThumbContainer.visibility = View.GONE
-            binding.ivPlay.visibility = View.GONE
-            binding.imgPlay.setImageDrawable(getDrawable(R.drawable.ic_pause))
-        }
+    //        binding.ivPlay.setOnClickListener {
+    //            binding.videoView.start()
+    //            binding.ryThumbContainer.visibility = View.GONE
+    //            binding.ivPlay.visibility = View.GONE
+    //            binding.imgPlay.setImageDrawable(getDrawable(R.drawable.ic_pause))
+    //        }
     }
 
     fun stripExtension(s: String?): String? {

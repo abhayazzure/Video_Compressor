@@ -56,7 +56,7 @@
                             android:background="@drawable/bg_card_transparent"
                             android:clickable="true"
                             android:focusable="true"
-                            android:visibility="visible" />
+                            android:visibility="gone" />
 
 
                         <LinearLayout
@@ -100,6 +100,7 @@
                         android:id="@+id/ry_thumb_container"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:visibility="gone"
                         android:background="@color/bg_light">
 
                         <ImageView
@@ -116,7 +117,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:src="@drawable/ic_play"
-                        android:visibility="visible" />
+                        android:visibility="gone" />
                 </RelativeLayout>
 
                 <ImageView
