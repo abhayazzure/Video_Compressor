@@ -5,7 +5,6 @@ import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.media.PlaybackParams
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.text.Editable
@@ -96,7 +95,7 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
                     .toString()
         }
-        binding.seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.seekbar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 binding.videoView.seekTo(1)
                 mediaPlayer.playbackParams = mediaPlayer.playbackParams.apply {
@@ -114,14 +113,12 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
             }
         })
         binding.rlSave.setOnClickListener {
-            saveVideoToInternalStorage(
-                Environment.getExternalStorageDirectory().absolutePath
-                    .toString()
-            )
+            saveVideoToInternalStorage( Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).absolutePath)
+            SaveVideo(GalleryFileActivity.videoList1[0].uri)
         }
 
         binding.playProgressBar.setOnSeekBarChangeListener(object :
-            SeekBar.OnSeekBarChangeListener {
+            OnSeekBarChangeListener {
             @SuppressLint("SetTextI18n")
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 val millis = mediaPlayer.currentPosition
@@ -162,19 +159,44 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
                 }
 
                 override fun onStartTrackingTouch(seekBar: SeekBar) {}
-                override fun onStopTrackingTouch(seekBar: SeekBar) {}
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    var myPlayBackParams: PlaybackParams? = null
+                    myPlayBackParams = PlaybackParams()
+                    myPlayBackParams.speed = progres!!.toFloat() //you can set speed here
+                    mediaPlayer.playbackParams = myPlayBackParams
+                }
             })
             videoView.setOnPreparedListener {
                 //works only from api 23
-                var myPlayBackParams: PlaybackParams? = null
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    myPlayBackParams = PlaybackParams()
-                    myPlayBackParams.speed = 0.8f //you can set speed here
-                    mediaPlayer.playbackParams = myPlayBackParams
-                }
+
             }
         }
 
+    }
+    private fun SaveVideo(f: Uri) {
+
+
+        //I don't know what data type I have to pass in the methods parameters
+        val root =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).absolutePath
+        val myDir = File("$root/Push Videos")
+        if (!myDir.exists()) {
+            myDir.mkdirs()
+        }
+        val generator = Random()
+        var n = 10000
+        n = generator.nextInt(n)
+        val fname = "Video-$n.mp4"
+        val file = File(myDir, fname)
+        if (file.exists()) file.delete()
+        try {
+            val out = FileOutputStream(file)
+            Toast.makeText(this, "PUSH Video Saved", Toast.LENGTH_LONG).show()
+            out.flush()
+            out.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun stripExtension(s: String?): String? {
@@ -183,6 +205,7 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
 
     fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
+    //    private fun saveVi
     private fun saveVideoToInternalStorage(filePath: String) {
         val uuid: UUID = UUID.randomUUID()
         try {
