@@ -115,7 +115,7 @@
             app:layout_constraintBottom_toTopOf="@+id/ly_preview_container"
             app:layout_constraintTop_toBottomOf="@+id/ry_top">
 
-            <com.devbrackets.android.exomedia.ui.widget.VideoView
+            <VideoView
                 android:id="@+id/video_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -124,55 +124,54 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 app:useDefaultControls="false"
-                app:useTextureViewBacking="true">
+                app:useTextureViewBacking="true" />
 
-                <View
-                    android:id="@+id/list_item_video_clicker_small"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="-9dp"
-                    android:layout_marginTop="1dp"
-                    android:background="@drawable/bg_card_transparent"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:visibility="gone" />
+            <View
+                android:id="@+id/list_item_video_clicker_small"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="-9dp"
+                android:layout_marginTop="1dp"
+                android:background="@drawable/bg_card_transparent"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/img_play"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/_25sdp"
-                        android:layout_weight="0.1"
-                        android:src="@drawable/ic_play_vector"
-                        app:tint="@color/white" />
+                <ImageView
+                    android:id="@+id/img_play"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_weight="0.1"
+                    android:src="@drawable/ic_play_vector"
+                    app:tint="@color/white" />
 
-                    <SeekBar
-                        android:id="@+id/play_progress_bar"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/_25sdp"
-                        android:layout_weight="1"
-                        android:maxHeight="1dp"
-                        android:progress="0"
-                        android:progressDrawable="@drawable/seekbar_progress_blue"
-                        android:thumb="@drawable/custom_thumb_blue" />
+                <SeekBar
+                    android:id="@+id/play_progress_bar"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_weight="1"
+                    android:maxHeight="1dp"
+                    android:progress="0"
+                    android:progressDrawable="@drawable/seekbar_progress_blue"
+                    android:thumb="@drawable/custom_thumb_blue" />
 
-                    <TextView
-                        android:id="@+id/tv_video_duration"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_25sdp"
-                        android:layout_marginEnd="@dimen/_8sdp"
-                        android:text="@string/_00_15_00_30"
-                        android:textColor="@color/white"
-                        android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tv_video_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:text="@string/_00_15_00_30"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
 
-                </LinearLayout>
-            </com.devbrackets.android.exomedia.ui.widget.VideoView>
+            </LinearLayout>
         </RelativeLayout>
 
         <androidx.cardview.widget.CardView
@@ -257,26 +256,36 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintBottom_toTopOf="@+id/ly_seekbarcontainer">
 
                 <RadioButton
-                    android:id="@+id/rbtn_withaudio"
+                    android:id="@+id/rb1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:buttonTint="@color/white"
                     android:checked="true"
                     android:fontFamily="@font/montserratmedium"
-                    android:text="@string/with_audio"
+                    android:text="*1.5"
                     android:textColor="@color/white" />
 
                 <RadioButton
-                    android:id="@+id/rbtn_withoutaudio"
+                    android:id="@+id/rb2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/white"
+                    android:checked="true"
+                    android:fontFamily="@font/montserratmedium"
+                    android:text="*2"
+                    android:textColor="@color/white" />
+
+                <RadioButton
+                    android:id="@+id/rb3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:buttonTint="@color/white"
                     android:fontFamily="@font/montserratmedium"
-                    android:text="@string/without_audio"
+                    android:text="*2.5"
                     android:textColor="@color/white" />
             </RadioGroup>
 

@@ -1,14 +1,16 @@
 package com.azzuresolutions.videocompressor.activity
 
 import android.annotation.SuppressLint
+import android.database.Cursor
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.media.PlaybackParams
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.text.Editable
-import android.util.Log
 import android.view.View
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
@@ -45,29 +47,6 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun buttonClick() {
-//        binding.ivPlay.setOnClickListener {
-//            binding.listItemVideoClickerSmall.visibility = View.GONE
-//            binding.cardThumb.visibility = View.GONE
-//            binding.ivPlay.visibility = View.GONE
-//            binding.videoView.start()
-//            binding.imgPlay.setImageDrawable(getDrawable(R.drawable.ic_pause))
-//            if (mediaPlayer.isPlaying) {
-//                mediaPlayer.pause()
-//                timer.shutdown()
-//                binding.imgPlay.setImageDrawable(getDrawable(R.drawable.ic_play))
-//            } else {
-//                mediaPlayer.start()
-//                binding.videoView.start()
-//                binding.imgPlay.setImageDrawable(getDrawable(R.drawable.ic_pause))
-//                timer = Executors.newScheduledThreadPool(1)
-//                timer.scheduleAtFixedRate({
-//                    if (!binding.playProgressBar.isPressed) {
-//                        binding.playProgressBar.progress = mediaPlayer.currentPosition
-//                        binding.videoView.seekTo(mediaPlayer.currentPosition.toLong())
-//                    }
-//                }, 10, 10, TimeUnit.MILLISECONDS)
-//            }
-//        }
         binding.imgPlay.setOnClickListener {
             binding.imgPlay.setImageDrawable(getDrawable(R.drawable.ic_pause))
             if (mediaPlayer.isPlaying) {
@@ -113,8 +92,7 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
             }
         })
         binding.rlSave.setOnClickListener {
-            saveVideoToInternalStorage( Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).absolutePath)
-            SaveVideo(GalleryFileActivity.videoList1[0].uri)
+            saveVideoToInternalStorage(binding.tv1.text.toString())
         }
 
         binding.playProgressBar.setOnSeekBarChangeListener(object :
@@ -141,62 +119,30 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
                 mediaPlayer.seekTo(binding.playProgressBar.progress)
-                binding.videoView.seekTo(binding.playProgressBar.progress.toLong())
+                binding.videoView.seekTo(binding.playProgressBar.progress)
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 mediaPlayer.seekTo(binding.playProgressBar.progress)
-                binding.videoView.seekTo(binding.playProgressBar.progress.toLong())
+                binding.videoView.seekTo(binding.playProgressBar.progress)
             }
         })
-        var progres: Int? = 0
+        var progres: Float? = 1f
         binding.run {
-            seekbar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                    progres = progress
-                    progres = progres!! / 100
-                    binding.txtStartDuration.text = progress.toString()
-                }
-
-                override fun onStartTrackingTouch(seekBar: SeekBar) {}
-                override fun onStopTrackingTouch(seekBar: SeekBar) {
-                    var myPlayBackParams: PlaybackParams? = null
-                    myPlayBackParams = PlaybackParams()
-                    myPlayBackParams.speed = progres!!.toFloat() //you can set speed here
-                    mediaPlayer.playbackParams = myPlayBackParams
-                }
-            })
             videoView.setOnPreparedListener {
-                //works only from api 23
-
+                if (binding.rb1.isSelected) {
+                    progres = 1.5f
+                } else if (binding.rb2.isSelected) {
+                    progres = 2.0f
+                } else if (binding.rb3.isSelected) {
+                    progres = 2.5f
+                }
+                val myPlayBackParams = PlaybackParams()
+                myPlayBackParams.speed = progres!! //you can set speed here
+                it.playbackParams = myPlayBackParams
             }
         }
 
-    }
-    private fun SaveVideo(f: Uri) {
-
-
-        //I don't know what data type I have to pass in the methods parameters
-        val root =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).absolutePath
-        val myDir = File("$root/Push Videos")
-        if (!myDir.exists()) {
-            myDir.mkdirs()
-        }
-        val generator = Random()
-        var n = 10000
-        n = generator.nextInt(n)
-        val fname = "Video-$n.mp4"
-        val file = File(myDir, fname)
-        if (file.exists()) file.delete()
-        try {
-            val out = FileOutputStream(file)
-            Toast.makeText(this, "PUSH Video Saved", Toast.LENGTH_LONG).show()
-            out.flush()
-            out.close()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
     }
 
     fun stripExtension(s: String?): String? {
@@ -206,14 +152,21 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
     fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
     //    private fun saveVi
-    private fun saveVideoToInternalStorage(filePath: String) {
-        val uuid: UUID = UUID.randomUUID()
+    open fun getRealPathFromURI(contentUri: Uri?): String? {
+        val proj = arrayOf(MediaStore.Audio.Media.DATA)
+        val cursor: Cursor = managedQuery(contentUri, proj, null, null, null)
+        val column_index: Int = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)
+        cursor.moveToFirst()
+        return cursor.getString(column_index)
+    }
+
+    private fun saveVideoToInternalStorage(fileName: String) {
         try {
-            val currentFile = File(filePath)
-            val loc = Environment.getExternalStorageDirectory().absolutePath
-            val directory = File(loc, "Video Compressor.mp4")
-            directory.parentFile!!.createNewFile()
-            val fileName = String.format("$uuid.mp4")
+            val currentFile = File(getRealPathFromURI(GalleryFileActivity.videoList1[0].uri)!!)
+            val loc = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            val directory = File(loc.absolutePath + "/Video Compressor")
+            directory.mkdir()
+            val fileName = String.format("$fileName.mp4")
             val newfile = File(directory, fileName)
             if (currentFile.exists()) {
                 val inputStream: InputStream = FileInputStream(currentFile)
@@ -236,10 +189,7 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
                 ).show()
             }
         } catch (e: java.lang.Exception) {
-            Log.e(
-                "",
-                e.toString()
-            )
+            e.printStackTrace()
         }
     }
 
@@ -282,6 +232,7 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
         binding.playProgressBar.progress = 0
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         super.onBackPressed()
         finish()

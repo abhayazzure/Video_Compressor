@@ -8,8 +8,10 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import com.azzuresolutions.videocompressor.BuildConfig
 import com.azzuresolutions.videocompressor.adapter.VideoAdapter
 import com.azzuresolutions.videocompressor.databinding.ActivityMainBinding
 import com.azzuresolutions.videocompressor.model.VideoModel
@@ -76,7 +78,7 @@ class MainActivity : AppCompatActivity() {
                 checkWritePermission(grantResults, "Fast")
             }
             5 -> {
-                checkWritePermission(grantResults,"Convert to Mp3")
+                checkWritePermission(grantResults, "Convert to Mp3")
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -89,12 +91,25 @@ class MainActivity : AppCompatActivity() {
                 z = true
             }
             if (z) {
-                startActivity(
-                    Intent(
-                        this,
-                        GalleryFileActivity::class.java
-                    ).putExtra("name", name)
-                )
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//                    try {
+//                        val uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID)
+//                        val intent =
+//                            Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri)
+//                        startActivity(intent)
+//                    } catch (ex: java.lang.Exception) {
+//                        val intent = Intent()
+//                        intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+//                        startActivity(intent)
+//                    }
+//                } else {
+                    startActivity(
+                        Intent(
+                            this,
+                            GalleryFileActivity::class.java
+                        ).putExtra("name", name)
+                    )
+                }
             } else if (Build.VERSION.SDK_INT >= 25 && shouldShowRequestPermissionRationale(Manifest.permission.READ_MEDIA_VIDEO)) {
                 if (Build.VERSION.SDK_INT >= 25) {
                     requestPermissions(
@@ -107,4 +122,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-}
+//}
