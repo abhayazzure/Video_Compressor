@@ -12,10 +12,10 @@
         android:layout_height="wrap_content"
         android:visibility="visible"/>
 
-    <com.devbrackets.android.exomedia.ui.widget.VideoView
+    <VideoView
         android:id="@+id/video_view"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:useDefaultControls="true"
         android:layout_below="@+id/rvVideo"/>
 </RelativeLayout>

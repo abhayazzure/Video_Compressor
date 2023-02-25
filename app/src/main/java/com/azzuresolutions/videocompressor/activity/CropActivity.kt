@@ -80,12 +80,12 @@ class CropActivity : AppCompatActivity() {
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
                 mediaPlayer.seekTo(binding.playProgressBar.progress)
-                binding.videoView.seekTo(binding.playProgressBar.progress.toLong())
+                binding.videoView.seekTo(binding.playProgressBar.progress)
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 mediaPlayer.seekTo(binding.playProgressBar.progress)
-                binding.videoView.seekTo(binding.playProgressBar.progress.toLong())
+                binding.videoView.seekTo(binding.playProgressBar.progress)
             }
         })
     }

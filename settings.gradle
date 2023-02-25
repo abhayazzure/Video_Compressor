@@ -1,8 +1,8 @@
 pluginManagement {
     repositories {
         google()
-        jcenter()
         mavenCentral()
+        jcenter()
         gradlePluginPortal()
         maven { url 'https://jitpack.io' }
     }
@@ -18,3 +18,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Video Compressor"
 include ':app'
+include ':k4l-video-trimmer'

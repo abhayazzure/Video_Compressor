@@ -3,13 +3,13 @@ package com.azzuresolutions.videocompressor.activity
 import android.annotation.SuppressLint
 import android.database.Cursor
 import android.media.AudioAttributes
+import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
 import android.media.PlaybackParams
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.provider.OpenableColumns
 import android.text.Editable
 import android.view.View
 import android.widget.SeekBar
@@ -18,6 +18,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.azzuresolutions.videocompressor.R
 import com.azzuresolutions.videocompressor.databinding.ActivityVideoPlayBackSpeedChangeBinding
+import life.knowledge4.videotrimmer.K4LVideoTrimmer
+import life.knowledge4.videotrimmer.interfaces.OnTrimVideoListener
+import life.knowledge4.videotrimmer.utils.BackgroundExecutor
+import life.knowledge4.videotrimmer.utils.TrimVideoUtils
 import java.io.*
 import java.util.*
 import java.util.concurrent.Executors
@@ -91,6 +95,7 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
                 TODO("Not yet implemented")
             }
         })
+
         binding.rlSave.setOnClickListener {
             saveVideoToInternalStorage(binding.tv1.text.toString())
         }
@@ -127,6 +132,7 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
                 binding.videoView.seekTo(binding.playProgressBar.progress)
             }
         })
+
         var progres: Float? = 1f
         binding.run {
             videoView.setOnPreparedListener {
@@ -158,6 +164,40 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
         val column_index: Int = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)
         cursor.moveToFirst()
         return cursor.getString(column_index)
+    }
+
+    private fun onSaveClicked() {
+        binding.videoView.visibility = View.VISIBLE
+        binding.videoView.pause()
+        val mediaMetadataRetriever = MediaMetadataRetriever()
+        mediaMetadataRetriever.setDataSource(this, GalleryFileActivity.videoList1[0].uri)
+        val METADATA_KEY_DURATION =
+            mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!
+                .toLong()
+        val file: File = File(GalleryFileActivity.videoList1[0].uri.path!!)
+
+//        notify that video trimming started
+//        if (mOnTrimVideoListener != null) mOnTrimVideoListener.onTrimStarted()
+        BackgroundExecutor.execute(
+            object : BackgroundExecutor.Task("", 0L, "") {
+                override fun execute() {
+                    try {
+                        TrimVideoUtils.startTrim(
+                            binding.tv1.text.toString(),
+                            file,
+                            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + "/Video Compressor/")
+                                .toString(),
+                            0,
+                            100000,
+                            this
+                        )
+                    } catch (e: Throwable) {
+                        Thread.getDefaultUncaughtExceptionHandler()
+                            .uncaughtException(Thread.currentThread(), e)
+                    }
+                }
+            }
+        )
     }
 
     private fun saveVideoToInternalStorage(fileName: String) {
@@ -237,4 +277,5 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
         super.onBackPressed()
         finish()
     }
+
 }

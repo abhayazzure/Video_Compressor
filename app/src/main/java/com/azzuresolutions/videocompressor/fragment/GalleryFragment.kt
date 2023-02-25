@@ -1,8 +1,8 @@
 package com.azzuresolutions.videocompressor.fragment
 
 import android.content.ContentUris
-import android.content.Context
 import android.database.Cursor
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -11,18 +11,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import com.azzuresolutions.videocompressor.R
 import com.azzuresolutions.videocompressor.adapter.VideoAdapter
 import com.azzuresolutions.videocompressor.databinding.FragmentGalleryBinding
 import com.azzuresolutions.videocompressor.model.VideoModel
-import com.devbrackets.android.exomedia.listener.OnPreparedListener
-import java.util.concurrent.TimeUnit
-import kotlin.time.Duration.Companion.minutes
 import kotlin.time.ExperimentalTime
-import kotlin.time.minutes
 
 
-class GalleryFragment : Fragment(), OnPreparedListener {
+class GalleryFragment : Fragment(), MediaPlayer.OnPreparedListener {
 
     private lateinit var binding: FragmentGalleryBinding
     var videoList = mutableListOf<VideoModel>()
@@ -48,7 +43,6 @@ class GalleryFragment : Fragment(), OnPreparedListener {
         this.binding.rvVideo.adapter = videoAdapter
     }
 
-    @OptIn(ExperimentalTime::class)
     private fun getAllMediaFilesOnDevice(): MutableList<VideoModel> {
         val videoList = mutableListOf<VideoModel>()
         val collection = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
@@ -108,8 +102,7 @@ class GalleryFragment : Fragment(), OnPreparedListener {
         return videoList
     }
 
-
-    override fun onPrepared() {
+    override fun onPrepared(mp: MediaPlayer?) {
         binding.videoView.start();
     }
 }

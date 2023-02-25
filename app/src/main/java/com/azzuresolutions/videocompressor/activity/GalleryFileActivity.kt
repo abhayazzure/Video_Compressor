@@ -58,6 +58,11 @@ class GalleryFileActivity : AppCompatActivity() {
                     Intent(this, VideoPlayBackSpeedChangeActivity::class.java)
                 )
                 finish()
+            } else if (intent.getStringExtra("name") == "Trim") {
+                startActivity(
+                    Intent(this, VideoTrimActivity::class.java)
+                )
+                finish()
             }
         }
     }
@@ -67,7 +72,7 @@ class GalleryFileActivity : AppCompatActivity() {
         adapter = viewPagerAdapter
         viewPagerAdapter.addFrag(GalleryFragment(), "VIDEO")
         adapter!!.addFrag(LargeFragment(), "Large Video")
-        adapter!!.addFrag(SAFFragment(), "BROWSE")
+//        adapter!!.addFrag(SAFFragment(), "BROWSE")
         viewPager.adapter = adapter
     }
 

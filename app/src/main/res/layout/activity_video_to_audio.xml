@@ -36,16 +36,14 @@
                         android:layout_height="match_parent"
                         android:visibility="visible">
 
-                        <com.devbrackets.android.exomedia.ui.widget.VideoView
+                        <VideoView
                             android:id="@+id/video_view"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentTop="true"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentBottom="true"
-                            app:useDefaultControls="false"
-                            app:useTextureViewBacking="true" />
+                            android:layout_alignParentBottom="true" />
 
                         <View
                             android:id="@+id/list_item_video_clicker_small"
@@ -100,8 +98,8 @@
                         android:id="@+id/ry_thumb_container"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:visibility="gone"
-                        android:background="@color/bg_light">
+                        android:background="@color/bg_light"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/iv_video_thumb"

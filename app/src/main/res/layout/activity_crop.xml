@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
- <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-     xmlns:app="http://schemas.android.com/apk/res-auto"
-     xmlns:tools="http://schemas.android.com/tools"
-     android:layout_width="match_parent"
-     android:layout_height="match_parent"
-     android:background="#191a1e"
-     android:keepScreenOn="true"
-     android:orientation="vertical">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#191a1e"
+    android:keepScreenOn="true"
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -117,74 +117,74 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ry_top">
-            <com.devbrackets.android.exomedia.ui.widget.VideoView
+
+            <VideoView
                 android:id="@+id/video_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true" />
+
+
+            <View
+                android:id="@+id/list_item_video_clicker_small"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="-9dp"
+                android:layout_marginTop="1dp"
+                android:background="@drawable/bg_card_transparent"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                app:useDefaultControls="false"
-                app:useTextureViewBacking="true">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                tools:ignore="MissingConstraints">
 
-                <View
-                    android:id="@+id/list_item_video_clicker_small"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="-9dp"
-                    android:layout_marginTop="1dp"
-                    android:background="@drawable/bg_card_transparent"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:visibility="gone" />
+                <ImageView
+                    android:id="@+id/img_play"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_weight="0.1"
+                    android:src="@drawable/ic_play_vector"
+                    app:tint="@color/white" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                <SeekBar
+                    android:id="@+id/play_progress_bar"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_weight="1"
+                    android:maxHeight="1dp"
+                    android:progress="0"
+                    android:progressDrawable="@drawable/seekbar_progress_blue"
+                    android:thumb="@drawable/custom_thumb_blue" />
 
-                    <ImageView
-                        android:id="@+id/img_play"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/_25sdp"
-                        android:layout_weight="0.1"
-                        android:src="@drawable/ic_play_vector"
-                        app:tint="@color/white" />
+                <TextView
+                    android:id="@+id/tv_video_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:text="@string/_00_15_00_30"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
 
-                    <SeekBar
-                        android:id="@+id/play_progress_bar"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/_25sdp"
-                        android:layout_weight="1"
-                        android:maxHeight="1dp"
-                        android:progress="0"
-                        android:progressDrawable="@drawable/seekbar_progress_blue"
-                        android:thumb="@drawable/custom_thumb_blue" />
-
-                    <TextView
-                        android:id="@+id/tv_video_duration"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_25sdp"
-                        android:layout_marginEnd="@dimen/_8sdp"
-                        android:text="@string/_00_15_00_30"
-                        android:textColor="@color/white"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-            </com.devbrackets.android.exomedia.ui.widget.VideoView>
-
-<!--            <com.videoconverter.videocompressor.videocrop.cropview.window.CropVideoView-->
-<!--                android:id="@+id/cropVideoView"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="0dp"-->
-<!--                android:background="@color/bg_light"-->
-<!--                app:layout_constraintBottom_toBottomOf="0"-->
-<!--                app:layout_constraintLeft_toLeftOf="0"-->
-<!--                app:layout_constraintRight_toRightOf="0"-->
-<!--                app:layout_constraintTop_toTopOf="0" />-->
+            </LinearLayout>
+            <!--            <com.videoconverter.videocompressor.videocrop.cropview.window.CropVideoView-->
+            <!--                android:id="@+id/cropVideoView"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="0dp"-->
+            <!--                android:background="@color/bg_light"-->
+            <!--                app:layout_constraintBottom_toBottomOf="0"-->
+            <!--                app:layout_constraintLeft_toLeftOf="0"-->
+            <!--                app:layout_constraintRight_toRightOf="0"-->
+            <!--                app:layout_constraintTop_toTopOf="0" />-->
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
