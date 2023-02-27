@@ -2,6 +2,7 @@ package com.azzuresolutions.videocompressor.activity
 
 import android.annotation.SuppressLint
 import android.database.Cursor
+import android.graphics.Movie
 import android.media.AudioAttributes
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
@@ -18,11 +19,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.azzuresolutions.videocompressor.R
 import com.azzuresolutions.videocompressor.databinding.ActivityVideoPlayBackSpeedChangeBinding
-import life.knowledge4.videotrimmer.K4LVideoTrimmer
-import life.knowledge4.videotrimmer.interfaces.OnTrimVideoListener
+import com.google.android.gms.tagmanager.Container
+import com.google.ar.core.Track
 import life.knowledge4.videotrimmer.utils.BackgroundExecutor
-import life.knowledge4.videotrimmer.utils.TrimVideoUtils
 import java.io.*
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
@@ -88,12 +89,11 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                TODO("Not yet implemented")
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                TODO("Not yet implemented")
             }
+
         })
 
         binding.rlSave.setOnClickListener {
@@ -182,14 +182,13 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
             object : BackgroundExecutor.Task("", 0L, "") {
                 override fun execute() {
                     try {
-                        TrimVideoUtils.startTrim(
+                        startTrim(
                             binding.tv1.text.toString(),
                             file,
                             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + "/Video Compressor/")
                                 .toString(),
                             0,
                             100000,
-                            this
                         )
                     } catch (e: Throwable) {
                         Thread.getDefaultUncaughtExceptionHandler()
@@ -199,6 +198,121 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
             }
         )
     }
+
+    @Throws(IOException::class)
+    fun startTrim(
+        filename: String,
+        src: File,
+        dst: String,
+        startMs: Long,
+        endMs: Long,
+    ) {
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
+        val fileName = "$filename.mp4"
+        val filePath = dst + fileName
+        val file = File(filePath)
+        file.parentFile.mkdirs()
+//        genVideoUsingMp4Parser(src, file, startMs, endMs)
+    }
+
+//    @Throws(IOException::class)
+//    private fun genVideoUsingMp4Parser(
+//        src: File,
+//        dst: File,
+//        startMs: Long,
+//        endMs: Long
+//    ) {
+//        // NOTE: Switched to using FileDataSourceViaHeapImpl since it does not use memory mapping (VM).
+//        // Otherwise we get OOM with large movie files.
+//        val movie: Movie = MovieCreator.build(FileDataSourceViaHeapImpl(src.absolutePath))
+//        val tracks: List<Track> = movie.getTracks()
+//        movie.setTracks(LinkedList<Track>())
+//        // remove all tracks we will create new tracks from the old
+//        var startTime1 = (startMs / 1000).toDouble()
+//        var endTime1 = (endMs / 1000).toDouble()
+//        var timeCorrected = false
+//
+//        // Here we try to find a track that has sync samples. Since we can only start decoding
+//        // at such a sample we SHOULD make sure that the start of the new fragment is exactly
+//        // such a frame
+//        for (track in tracks) {
+//            if (track.getSyncSamples() != null && track.getSyncSamples().size > 0) {
+//                if (timeCorrected) {
+//                    // This exception here could be a false positive in case we have multiple tracks
+//                    // with sync samples at exactly the same positions. E.g. a single movie containing
+//                    // multiple qualities of the same video (Microsoft Smooth Streaming file)
+//                    throw RuntimeException("The startTime has already been corrected by another track with SyncSample. Not Supported.")
+//                }
+//                startTime1 = correctTimeToSyncSample(track, startTime1, false)
+//                endTime1 = correctTimeToSyncSample(track, endTime1, true)
+//                timeCorrected = true
+//            }
+//        }
+//        for (track in tracks) {
+//            var currentSample: Long = 0
+//            var currentTime = 0.0
+//            var lastTime = -1.0
+//            var startSample1: Long = -1
+//            var endSample1: Long = -1
+//            for (i in track.getSampleDurations().indices) {
+//                val delta: Long = track.getSampleDurations().get(i)
+//                if (currentTime > lastTime && currentTime <= startTime1) {
+//                    // current sample is still before the new starttime
+//                    startSample1 = currentSample
+//                }
+//                if (currentTime > lastTime && currentTime <= endTime1) {
+//                    // current sample is after the new start time and still before the new endtime
+//                    endSample1 = currentSample
+//                }
+//                lastTime = currentTime
+//                currentTime += delta.toDouble() / track.getTrackMetaData().getTimescale().toDouble()
+//                currentSample++
+//            }
+//            movie.addTrack(AppendTrack(CroppedTrack(track, startSample1, endSample1)))
+//        }
+//        dst.parentFile.mkdirs()
+//        if (!dst.exists()) {
+//            dst.createNewFile()
+//        }
+//        val out: Container = DefaultMp4Builder().build(movie)
+//        val fos = FileOutputStream(dst)
+//        val fc = fos.channel
+//        out.writeContainer(fc)
+//        fc.close()
+//        fos.close()
+//    }
+
+//    private fun correctTimeToSyncSample(
+//        track: Track,
+//        cutHere: Double,
+//        next: Boolean
+//    ): Double {
+//        val timeOfSyncSamples = DoubleArray(track.getSyncSamples().size)
+//        var currentSample: Long = 0
+//        var currentTime = 0.0
+//        for (i in track.getSampleDurations().indices) {
+//            val delta: Long = track.getSampleDurations().get(i)
+//            if (Arrays.binarySearch(track.getSyncSamples(), currentSample + 1) >= 0) {
+//                // samples always start with 1 but we start with zero therefore +1
+//                timeOfSyncSamples[Arrays.binarySearch(track.getSyncSamples(), currentSample + 1)] =
+//                    currentTime
+//            }
+//            currentTime += delta.toDouble() / track.getTrackMetaData().getTimescale().toDouble()
+//            currentSample++
+//        }
+//        var previous = 0.0
+//        for (timeOfSyncSample in timeOfSyncSamples) {
+//            if (timeOfSyncSample > cutHere) {
+//                return if (next) {
+//                    timeOfSyncSample
+//                } else {
+//                    previous
+//                }
+//            }
+//            previous = timeOfSyncSample
+//        }
+//        return timeOfSyncSamples[timeOfSyncSamples.size - 1]
+//    }
 
     private fun saveVideoToInternalStorage(fileName: String) {
         try {

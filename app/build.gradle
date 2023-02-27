@@ -56,11 +56,16 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:23.1.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.media2:media2-widget:1.2.1'
+    implementation 'com.google.ar:core:1.35.0'
+
+    implementation project(':k4l-video-trimmer')
+    implementation project(':videcrop')
+
+    implementation 'com.google.android.gms:play-services-tagmanager-v4-impl:18.0.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
-    implementation project(':k4l-video-trimmer')
 }
