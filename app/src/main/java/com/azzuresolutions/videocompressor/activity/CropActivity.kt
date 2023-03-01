@@ -1,10 +1,12 @@
 package com.azzuresolutions.videocompressor.activity
 
 import android.content.Intent
+import android.database.Cursor
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.appcompat.app.AppCompatActivity
-import com.azzuresolutions.videocompressor.R
 import com.azzuresolutions.videocompressor.databinding.ActivityCropBinding
 import net.vrgsoft.videcrop.VideoCropActivity
 import java.util.concurrent.ScheduledExecutorService
@@ -19,16 +21,18 @@ class CropActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCropBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_crop)
+        setContentView(binding.root)
+
         val inputPath = "/storage/emulated/0/1111.mp4"
         val outputPath = "/storage/emulated/0/YDXJ08599.mp4"
-//        val uri: String = getRealPathFromURI(GalleryFileActivity.videoList1[0].uri)!!
+        val uri: String = getRealPathFromURI(GalleryFileActivity.videoList1[0].uri)!!
         startActivityForResult(
             VideoCropActivity.createIntent(
                 this,
-                inputPath,
+                uri,
                 outputPath
-            ), CROP_REQUEST)
+            ), CROP_REQUEST
+        )
 //        loadVideo()
 //        buttonClick()
     }
@@ -45,13 +49,13 @@ class CropActivity : AppCompatActivity() {
         }
     }
 
-//    open fun getRealPathFromURI(contentUri: Uri?): String? {
-//        val proj = arrayOf(MediaStore.Audio.Media.DATA)
-//        val cursor: Cursor = managedQuery(contentUri, proj, null, null, null)
-//        val column_index: Int = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)
-//        cursor.moveToFirst()
-//        return cursor.getString(column_index)
-//    }
+    open fun getRealPathFromURI(contentUri: Uri?): String? {
+        val proj = arrayOf(MediaStore.Video.Media.DATA)
+        val cursor: Cursor = managedQuery(contentUri, proj, null, null, null)
+        val column_index: Int = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)
+        cursor.moveToFirst()
+        return cursor.getString(column_index)
+    }
 
     private fun buttonClick() {
 

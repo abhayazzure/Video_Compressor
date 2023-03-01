@@ -1,20 +1,11 @@
 package com.azzuresolutions.videocompressor.activity
 
 import android.Manifest
-import android.content.ContentUris
 import android.content.Intent
-import android.database.Cursor
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
-import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
-import com.azzuresolutions.videocompressor.BuildConfig
-import com.azzuresolutions.videocompressor.adapter.VideoAdapter
 import com.azzuresolutions.videocompressor.databinding.ActivityMainBinding
-import com.azzuresolutions.videocompressor.model.VideoModel
 
 
 class MainActivity : AppCompatActivity() {
@@ -103,23 +94,25 @@ class MainActivity : AppCompatActivity() {
 //                        startActivity(intent)
 //                    }
 //                } else {
-                    startActivity(
-                        Intent(
-                            this,
-                            GalleryFileActivity::class.java
-                        ).putExtra("name", name)
-                    )
-                }
-            } else if (Build.VERSION.SDK_INT >= 25 && shouldShowRequestPermissionRationale(Manifest.permission.READ_MEDIA_VIDEO)) {
-                if (Build.VERSION.SDK_INT >= 25) {
-                    requestPermissions(
-                        arrayOf(
-                            Manifest.permission.READ_MEDIA_VIDEO,
-                            Manifest.permission.POST_NOTIFICATIONS
-                        ), 1009
-                    )
-                }
+                startActivity(
+                    Intent(
+                        this,
+                        GalleryFileActivity::class.java
+                    ).putExtra("name", name)
+                )
+//                }
+            }
+        } else if (Build.VERSION.SDK_INT >= 25 && shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            if (Build.VERSION.SDK_INT >= 25) {
+                requestPermissions(
+                    arrayOf(
+                        Manifest.permission.READ_MEDIA_VIDEO,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ), 1009
+                )
             }
         }
     }
+}
 //}
