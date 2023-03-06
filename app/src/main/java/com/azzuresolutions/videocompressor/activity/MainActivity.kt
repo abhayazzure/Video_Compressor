@@ -48,6 +48,9 @@ class MainActivity : AppCompatActivity() {
         binding.btnVideotoaudio.setOnClickListener {
             requestPermissions(READ_AND_WRITE, 5)
         }
+        binding.lyCompression.setOnClickListener {
+            startActivity(Intent(this,MyCreationActivity::class.java))
+        }
     }
 
     override fun onRequestPermissionsResult(

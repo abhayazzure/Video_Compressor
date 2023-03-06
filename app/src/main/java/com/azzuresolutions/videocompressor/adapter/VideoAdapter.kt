@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
 
 class VideoAdapter(
     private var context: Context? = null,
-    private var videoList: List<VideoModel>,
+    private var videoList: List<VideoModel>
 ) : RecyclerView.Adapter<VideoAdapter.ViewHolder>() {
 
 

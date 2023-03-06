@@ -39,6 +39,9 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="tiramisu">
         <activity
+            android:name=".activity.MyCreationActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.VideoTrimActivity"
             android:exported="false" />
         <activity
@@ -49,9 +52,7 @@
             android:exported="false" />
         <activity
             android:name=".activity.CropActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".activity.AudioPlayActivity"
             android:exported="false" />
