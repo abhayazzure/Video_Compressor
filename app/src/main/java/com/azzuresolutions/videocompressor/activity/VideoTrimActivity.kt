@@ -48,36 +48,36 @@ class VideoTrimActivity : AppCompatActivity(), OnTrimVideoListener {
     override fun onError(message: String?) {
     }
 
-    private fun saveVideoToInternalStorage(fileName: UUID, filePath: String) {
-        try {
-            val currentFile = File(URI.create(filePath))
-            val loc = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            val directory = File(loc.absolutePath + "/Video Compressor")
-            directory.mkdir()
-            val fileName = String.format("$fileName.mp4")
-            val newfile = File(directory, fileName)
-            if (currentFile.exists()) {
-                val inputStream: InputStream = FileInputStream(currentFile)
-                val outputStream: OutputStream = FileOutputStream(newfile)
-                val buf = ByteArray(1024)
-                var len: Int
-                while (inputStream.read(buf).also { len = it } > 0) {
-                    outputStream.write(buf, 0, len)
-                }
-                outputStream.flush()
-                inputStream.close()
-                outputStream.close()
-                Toast.makeText(applicationContext, "Video has just saved!!", Toast.LENGTH_LONG)
-                    .show()
-            } else {
-                Toast.makeText(
-                    applicationContext,
-                    "Video has failed for saving!!",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
-        }
-    }
+//    private fun saveVideoToInternalStorage(fileName: UUID, filePath: String) {
+//        try {
+//            val currentFile = File(URI.create(filePath))
+//            val loc = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+//            val directory = File(loc.absolutePath + "/Video Compressor")
+//            directory.mkdir()
+//            val fileName = String.format("$fileName.mp4")
+//            val newfile = File(directory, fileName)
+//            if (currentFile.exists()) {
+//                val inputStream: InputStream = FileInputStream(currentFile)
+//                val outputStream: OutputStream = FileOutputStream(newfile)
+//                val buf = ByteArray(1024)
+//                var len: Int
+//                while (inputStream.read(buf).also { len = it } > 0) {
+//                    outputStream.write(buf, 0, len)
+//                }
+//                outputStream.flush()
+//                inputStream.close()
+//                outputStream.close()
+//                Toast.makeText(applicationContext, "Video has just saved!!", Toast.LENGTH_LONG)
+//                    .show()
+//            } else {
+//                Toast.makeText(
+//                    applicationContext,
+//                    "Video has failed for saving!!",
+//                    Toast.LENGTH_LONG
+//                ).show()
+//            }
+//        } catch (e: java.lang.Exception) {
+//            e.printStackTrace()
+//        }
+//    }
 }
