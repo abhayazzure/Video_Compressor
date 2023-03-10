@@ -23,6 +23,8 @@
  */
 package life.knowledge4.videotrimmer;
 
+import static life.knowledge4.videotrimmer.utils.TrimVideoUtils.stringForTime;
+
 import android.content.Context;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
@@ -37,12 +39,15 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.VideoView;
+
+import androidx.annotation.NonNull;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -60,10 +65,6 @@ import life.knowledge4.videotrimmer.view.ProgressBarView;
 import life.knowledge4.videotrimmer.view.RangeSeekBarView;
 import life.knowledge4.videotrimmer.view.Thumb;
 import life.knowledge4.videotrimmer.view.TimeLineView;
-
-import static life.knowledge4.videotrimmer.utils.TrimVideoUtils.stringForTime;
-
-import androidx.annotation.NonNull;
 
 public class K4LVideoTrimmer extends FrameLayout {
 
@@ -151,9 +152,14 @@ public class K4LVideoTrimmer extends FrameLayout {
 
         findViewById(R.id.btSave)
                 .setOnClickListener(
-                        view -> onSaveClicked("1010")
+                        view -> {
+                            findViewById(R.id.rlSaveScreen).setVisibility(VISIBLE);
+                        }
                 );
-
+        EditText editText = findViewById(R.id.etAudioSaveName);
+        findViewById(R.id.rlSave).setOnClickListener(view -> {
+            onSaveClicked(editText.getText().toString());
+        });
         final GestureDetector gestureDetector = new
                 GestureDetector(getContext(),
                 new GestureDetector.SimpleOnGestureListener() {
@@ -286,7 +292,7 @@ public class K4LVideoTrimmer extends FrameLayout {
                         @Override
                         public void execute() {
                             try {
-                                TrimVideoUtils.startTrim(fileName,file, getDestinationPath(), mStartPosition, mEndPosition, mOnTrimVideoListener);
+                                TrimVideoUtils.startTrim(fileName, file, getDestinationPath(), mStartPosition, mEndPosition, mOnTrimVideoListener);
                             } catch (final Throwable e) {
                                 Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
                             }

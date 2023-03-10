@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit
 class AudioPlayActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAudioPlayBinding
     var fileName: String? = null
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
     private lateinit var timer: ScheduledExecutorService
     var duration: String? = null
 
@@ -43,7 +43,7 @@ class AudioPlayActivity : AppCompatActivity() {
     private fun dataCall() {
         Glide.with(this).load(GalleryFileActivity.videoList1[0].uri).into(binding.imagePhoto)
         val completePath: String =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + "/" + fileName)
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + "/Video Compressor/" + fileName)
                 .toString()
         file = File(completePath)
         val myUri1: Uri = Uri.fromFile(file)
@@ -68,16 +68,16 @@ class AudioPlayActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     fun createMediaPlayer(uri: Uri?) {
         mediaPlayer = MediaPlayer()
-        mediaPlayer.setAudioAttributes(
+        mediaPlayer!!.setAudioAttributes(
             AudioAttributes.Builder()
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                 .setUsage(AudioAttributes.USAGE_MEDIA)
                 .build()
         )
         try {
-            mediaPlayer.setDataSource(applicationContext, uri!!)
-            mediaPlayer.prepare()
-            val millis: Int = mediaPlayer.duration
+            mediaPlayer!!.setDataSource(applicationContext, uri!!)
+            mediaPlayer!!.prepare()
+            val millis: Int = mediaPlayer!!.duration
             val total_secs: Long = TimeUnit.SECONDS.convert(millis.toLong(), TimeUnit.MILLISECONDS)
             val mins: Long = TimeUnit.MINUTES.convert(total_secs, TimeUnit.SECONDS)
             val secs = total_secs - mins * 60
@@ -94,7 +94,7 @@ class AudioPlayActivity : AppCompatActivity() {
             duration = "$min:$sec"
             binding.seekAudioPlay.max = millis
             binding.seekAudioPlay.progress = 0
-            mediaPlayer.setOnCompletionListener { releaseMediaPlayer() }
+            mediaPlayer!!.setOnCompletionListener { releaseMediaPlayer() }
         } catch (_: IOException) {
         }
         binding.tvAudioDuration.text = "00:00/$duration"
@@ -130,7 +130,7 @@ class AudioPlayActivity : AppCompatActivity() {
         binding.seekAudioPlay.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             @SuppressLint("SetTextI18n")
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                val millis = mediaPlayer.currentPosition
+                val millis = mediaPlayer!!.currentPosition
                 val total_secs =
                     TimeUnit.SECONDS.convert(millis.toLong(), TimeUnit.MILLISECONDS)
                 val mins = TimeUnit.MINUTES.convert(total_secs, TimeUnit.SECONDS)
@@ -150,25 +150,38 @@ class AudioPlayActivity : AppCompatActivity() {
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                mediaPlayer.seekTo(binding.seekAudioPlay.progress)
+                mediaPlayer!!.seekTo(binding.seekAudioPlay.progress)
             }
         })
+        binding.btnBack.setOnClickListener {
+            mediaPlayer!!.stop()
+            finish()
+        }
         binding.ivAudioPlay.setOnClickListener {
             binding.ivAudioPlay.setImageDrawable(getDrawable(R.drawable.ic_pause))
-            if (mediaPlayer.isPlaying) {
-                mediaPlayer.pause()
+            if (mediaPlayer!!.isPlaying) {
+                mediaPlayer!!.pause()
                 timer.shutdown()
                 binding.ivAudioPlay.setImageDrawable(getDrawable(R.drawable.ic_play))
             } else {
-                mediaPlayer.start()
+                mediaPlayer!!.start()
                 binding.ivAudioPlay.setImageDrawable(getDrawable(R.drawable.ic_pause))
                 timer = Executors.newScheduledThreadPool(1)
                 timer.scheduleAtFixedRate({
                     if (!binding.seekAudioPlay.isPressed) {
-                        binding.seekAudioPlay.progress = mediaPlayer.currentPosition
+                        binding.seekAudioPlay.progress = mediaPlayer!!.currentPosition
                     }
                 }, 10, 10, TimeUnit.MILLISECONDS)
             }
         }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        GalleryFileActivity.videoList1.clear()
+        if (mediaPlayer !!.isPlaying) {
+            mediaPlayer!!.stop()
+        }
+        finish()
     }
 }

@@ -132,8 +132,8 @@ class VideoToAudioActivity : AppCompatActivity() {
             val name = binding.etAudioSaveName.text.trim().toString()
             AudioExtractor().genVideoUsingMuxer(
                 getRealPathFromURI(this, GalleryFileActivity.videoList1[0].uri),
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + "/$name.mp3")
-                    .toString(),
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                    .toString()+"/Video Compressor"+ "/$name.mp3",
                 -1,
                 -1,
                 useAudio = true,

@@ -2,6 +2,7 @@ R_DEF: Internal format may change without notice
 local
 color background_progress_color
 color background_video_color
+color black
 color black_translucent
 color colorAccent
 color colorPrimary
@@ -10,21 +11,29 @@ color line_button
 color line_color
 color progress_color
 color shadow_color
+color white
 dimen frames_video_height
 dimen progress_video_line_height
 drawable apptheme_text_select_handle_left
 drawable apptheme_text_select_handle_middle
 drawable apptheme_text_select_handle_right
 drawable black_button_background
+drawable ic_back_new
+drawable ic_comrpess_next
 drawable icon_video_play
 drawable play_button
+drawable pro_round_bg
 id btCancel
 id btSave
+id btn_back1
+id etAudioSaveName
 id handlerTop
 id icon_video_play
 id layout
 id layout_surface_view
 id lineTop
+id rlSave
+id rlSaveScreen
 id textSize
 id textTime
 id textTimeSelection
@@ -32,6 +41,9 @@ id timeLineBar
 id timeLineView
 id timeText
 id timeVideoView
+id tv1
+id tv2
+id tvSavePath
 id video_loader
 layout view_time_line
 string cancel

@@ -18,6 +18,11 @@ import com.azzuresolutions.videocompressor.model.VideoModel
 class AudioFragment : Fragment() {
     private lateinit var binding: FragmentAudioBinding
     var videoList = mutableListOf<VideoModel>()
+
+    companion object {
+        var click: Boolean = false
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,7 +43,7 @@ class AudioFragment : Fragment() {
     private fun getAllMediaFilesOnDevice(): MutableList<VideoModel> {
         val videoList = mutableListOf<VideoModel>()
         val collection = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-        val path = Environment.DIRECTORY_DOWNLOADS
+        val path = Environment.DIRECTORY_DOWNLOADS + "/Video Compressor"
         val strArr = arrayOf("%$path%")
         val projection = arrayOf(
             MediaStore.Video.Media._ID,
@@ -60,14 +65,14 @@ class AudioFragment : Fragment() {
         )!!
 
         query.use { cursor ->
-            val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID)
+            val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
             val nameColumn =
-                cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME)
+                cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
             val durationColumn =
-                cursor.getColumnIndexOrThrow(MediaStore.Video.VideoColumns.DURATION)
-            val sizeColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE)
-            val videoWidth = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.WIDTH)
-            val videoHeight = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.HEIGHT)
+                cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.DURATION)
+            val sizeColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)
+            val videoWidth = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.WIDTH)
+            val videoHeight = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.HEIGHT)
             while (cursor.moveToNext()) {
                 val id = cursor.getLong(idColumn)
                 val name = cursor.getString(nameColumn)
