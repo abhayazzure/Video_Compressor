@@ -2,9 +2,7 @@ package com.azzuresolutions.videocompressor.activity
 
 import android.annotation.SuppressLint
 import android.database.Cursor
-import android.graphics.Movie
 import android.media.AudioAttributes
-import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
 import android.media.PlaybackParams
 import android.net.Uri
@@ -19,11 +17,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.azzuresolutions.videocompressor.R
 import com.azzuresolutions.videocompressor.databinding.ActivityVideoPlayBackSpeedChangeBinding
-import com.google.android.gms.tagmanager.Container
-import com.google.ar.core.Track
-import life.knowledge4.videotrimmer.utils.BackgroundExecutor
 import java.io.*
-import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
@@ -44,6 +38,15 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
     }
 
     private fun videoLoad() {
+        if (intent.getStringExtra("name") == "Slow") {
+            binding.rb1.text = "0.75"
+            binding.rb2.text = "0.50"
+            binding.rb3.text = "0.25"
+        } else if (intent.getStringExtra("name") == "Fast") {
+            binding.rb1.text = "1.25"
+            binding.rb2.text = "1.50"
+            binding.rb3.text = "1.75"
+        }
         val uri: Uri = Uri.parse(GalleryFileActivity.videoList1[0].uri.toString())
         binding.videoView.setVideoURI(uri)
         binding.videoView.requestFocus()
@@ -89,6 +92,7 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
+
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
@@ -136,12 +140,22 @@ class VideoPlayBackSpeedChangeActivity : AppCompatActivity() {
         var progres: Float? = 1f
         binding.run {
             videoView.setOnPreparedListener {
-                if (binding.rb1.isSelected) {
-                    progres = 1.5f
-                } else if (binding.rb2.isSelected) {
-                    progres = 2.0f
-                } else if (binding.rb3.isSelected) {
-                    progres = 2.5f
+                if (intent.getStringExtra("name") == "Slow") {
+                    if (binding.rb1.isSelected) {
+                        progres = 0.75f
+                    } else if (binding.rb2.isSelected) {
+                        progres = 0.50f
+                    } else if (binding.rb3.isSelected) {
+                        progres = 0.25f
+                    }
+                } else if (intent.getStringExtra("name") == "Fast") {
+                    if (binding.rb1.isSelected) {
+                        progres = 1.25f
+                    } else if (binding.rb2.isSelected) {
+                        progres = 1.50f
+                    } else if (binding.rb3.isSelected) {
+                        progres = 1.75f
+                    }
                 }
                 val myPlayBackParams = PlaybackParams()
                 myPlayBackParams.speed = progres!! //you can set speed here

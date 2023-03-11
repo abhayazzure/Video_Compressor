@@ -1,21 +1,14 @@
 package com.azzuresolutions.videocompressor.activity
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.media.*
 import android.os.Bundle
-import android.os.Parcelable
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.azzuresolutions.videocompressor.adapter.ViewPagerAdapter
 import com.azzuresolutions.videocompressor.databinding.ActivityGalleryFileBinding
 import com.azzuresolutions.videocompressor.fragment.GalleryFragment
 import com.azzuresolutions.videocompressor.fragment.LargeFragment
-import com.azzuresolutions.videocompressor.fragment.SAFFragment
 import com.azzuresolutions.videocompressor.model.VideoModel
-import java.io.Serializable
-import java.nio.ByteBuffer
 
 
 class GalleryFileActivity : AppCompatActivity() {
@@ -55,7 +48,12 @@ class GalleryFileActivity : AppCompatActivity() {
                 finish()
             } else if (intent.getStringExtra("name") == "Fast") {
                 startActivity(
-                    Intent(this, VideoPlayBackSpeedChangeActivity::class.java)
+                    Intent(this, VideoPlayBackSpeedChangeActivity::class.java).putExtra("name","Fast")
+                )
+                finish()
+            } else if (intent.getStringExtra("name") == "Slow") {
+                startActivity(
+                    Intent(this, VideoPlayBackSpeedChangeActivity::class.java).putExtra("name","Slow")
                 )
                 finish()
             } else if (intent.getStringExtra("name") == "Trim") {

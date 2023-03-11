@@ -108,9 +108,11 @@ class AudioPlayActivity : AppCompatActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun buttonClick() {
+
         binding.btnHome.setOnClickListener {
             finish()
         }
+
         binding.btnWhatsapp.setOnClickListener {
             val intent = Intent()
             intent.action = Intent.ACTION_SEND
@@ -127,6 +129,7 @@ class AudioPlayActivity : AppCompatActivity() {
             StrictMode.setVmPolicy(builder.build())
             startActivity(Intent.createChooser(intent, "Share Audio Abd Alazez..."))
         }
+
         binding.seekAudioPlay.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             @SuppressLint("SetTextI18n")
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -149,14 +152,17 @@ class AudioPlayActivity : AppCompatActivity() {
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
+
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 mediaPlayer!!.seekTo(binding.seekAudioPlay.progress)
             }
         })
+
         binding.btnBack.setOnClickListener {
             mediaPlayer!!.stop()
             finish()
         }
+
         binding.ivAudioPlay.setOnClickListener {
             binding.ivAudioPlay.setImageDrawable(getDrawable(R.drawable.ic_pause))
             if (mediaPlayer!!.isPlaying) {
@@ -174,6 +180,7 @@ class AudioPlayActivity : AppCompatActivity() {
                 }, 10, 10, TimeUnit.MILLISECONDS)
             }
         }
+
     }
 
     @Deprecated("Deprecated in Java")

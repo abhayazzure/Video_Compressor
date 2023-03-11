@@ -4,8 +4,13 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.azzuresolutions.videocompressor.databinding.ActivityMainBinding
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
 
 
 class MainActivity : AppCompatActivity() {
@@ -32,6 +37,7 @@ class MainActivity : AppCompatActivity() {
         buttonClick()
     }
 
+
     private fun buttonClick() {
         binding.btnVideocrop.setOnClickListener {
             requestPermissions(READ_AND_WRITE, 1)
@@ -49,7 +55,7 @@ class MainActivity : AppCompatActivity() {
             requestPermissions(READ_AND_WRITE, 5)
         }
         binding.lyCompression.setOnClickListener {
-            startActivity(Intent(this,MyCreationActivity::class.java))
+            startActivity(Intent(this, MyCreationActivity::class.java))
         }
     }
 
